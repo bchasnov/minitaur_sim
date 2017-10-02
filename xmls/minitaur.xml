@@ -1,0 +1,210 @@
+<!---------------------------------------------------
+
+	Title: Minitaur model
+	Description: MuJoCo model for Ghost Robotics' Minitaur robot
+	Author: Benjamin Chasnov (bchasnov@uw.edu)
+	Version: 0.1
+
+	Units: Meters
+	Body Dimensions: length 0.4, width 0.28
+	Leg Dimensions: femur 0.1, tibia 0.2, nib 0.05
+
+	TODO
+		* Include the 5 degree leg tilts
+		* Make symmetric
+		* Add sensors to the leg tips
+		* Add mass
+		* Calibrate with physical robot
+
+------------------------------------------------------>
+
+<mujoco model="minitaur">
+	<compiler coordinate="global"/>
+
+	<default>
+		<geom rgba=".8 .6 .4 1"/>
+	</default>
+
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256"/>
+	</asset>
+
+	<worldbody>
+		<body>
+			<light pos="0 2 2" dir="0 -1 -1" diffuse="1 1 1"/>
+			<geom type="box" pos="-0.2 -0.33 0" size="0.2 0.008 0.02" rgba="0 0 0  0.2" />
+			<geom type="box" pos="-0.2  0.05 0" size="0.2 0.008 0.02" rgba="0 0 0  0.2" />
+			<geom type="box" pos="-0.2  -0.14 0" size="0.2 0.07 0.02" rgba="0 0 0  0.2" />
+			<joint type="free"/>
+
+
+			<body>
+				<!--- Geometry for motors (1) --->
+				<geom type="cylinder" fromto="0  0.04 0 0  0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="0 -0.04 0 0 -0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_1a">
+					<geom  name="femur_1a" type="capsule" fromto="0 -0.03 0  0.1 -0.03 0" size="0.01"/>
+					<joint name="hip_1a" type="hinge" pos="0 -0.04 0" axis="0 1 0"/>
+
+					<body name="tibia_1a">
+						<geom type="capsule" fromto="0.1 -0.01 0   0 -0.01 -0.1732" size="0.01" />
+						<joint name="knee_1a" type="hinge" pos="0.1 -0.02 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_1" type="capsule" fromto="0 -0.01 -0.1732  -0.01 -0.01 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_1b">
+					<geom  name="femur_1b" type="capsule" fromto="0 0.03 0 -0.1 0.03 0" size="0.01"/>
+					<joint name="hip_1b"   type="hinge" pos="0 0.03 0" axis="0 1 0"/>
+
+					<body name="tibia_1b">
+						<geom type="capsule" fromto="-0.1 0.01 0 0 0.01 -0.1732" size="0.01"/>
+						<joint name="knee_1b"  type="hinge" pos="-0.1 0.01 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+
+			<body>
+				<!--- Geometry for motors (2) --->
+				<geom type="cylinder" fromto="-0.4 0.04 0 -0.4 0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="-0.4 -0.04 0 -0.4 -0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_2a">
+					<geom  name="femur_2a" type="capsule" fromto="-0.4 -0.03 0  -0.3 -0.03 0" size="0.01"/>
+					<joint name="hip_2a" type="hinge" pos="-0.4 -0.04 0" axis="0 1 0"/>
+
+					<body name="tibia_2a">
+						<geom type="capsule" fromto="-0.3 -0.01 0   -0.4 -0.01 -0.1732" size="0.01" />
+						<joint name="knee_2a" type="hinge" pos="-0.3 -0.02 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_2" type="capsule" fromto="-0.4 -0.01 -0.1732  -0.41 -0.01 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_2b">
+					<geom  name="femur_2b" type="capsule" fromto="-0.4 0.03 0 -0.5 0.03 0" size="0.01"/>
+					<joint name="hip_2b"   type="hinge" pos="-0.4 0.03 0" axis="0 1 0"/>
+
+					<body name="tibia_2b">
+						<geom type="capsule" fromto="-0.5 0.01 0 -0.4 0.01 -0.1732" size="0.01"/>
+						<joint name="knee_2b"  type="hinge" pos="-0.5 0.01 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+
+
+			<body>
+				<!--- Geometry for motors (3) --->
+				<geom type="cylinder" fromto="0 -0.24 0 0 -0.22 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="0 -0.32 0 0 -0.34 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_3a">
+					<geom  name="femur_3a" type="capsule" fromto="0 -0.31 0  0.1 -0.31 0" size="0.01"/>
+					<joint name="hip_3a" type="hinge" pos="0 -0.32 0" axis="0 1 0"/>
+
+					<body name="tibia_3a">
+						<geom type="capsule" fromto="0.1 -0.29 0   0 -0.29 -0.1732" size="0.01" />
+						<joint name="knee_3a" type="hinge" pos="0.1 -0.30 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_3" type="capsule" fromto="0 -0.29 -0.1732  -0.01 -0.29 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_3b">
+					<geom  name="femur_3b" type="capsule" fromto="0 -0.25 0 -0.1 -0.25 0" size="0.01"/>
+					<joint name="hip_3b"   type="hinge" pos="0 -0.24 0" axis="0 1 0"/>
+
+					<body name="tibia_3b">
+						<geom type="capsule" fromto="-0.1 -0.27 0 0 -0.27 -0.1732" size="0.01"/>
+						<joint name="knee_3b"  type="hinge" pos="-0.1 -0.26 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+
+			<body>
+				<!--- Geometry for motors (4) --->
+				<geom type="cylinder" fromto="-0.4 -0.24 0 -0.4 -0.22 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="-0.4 -0.32 0 -0.4 -0.34 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_4a">
+					<geom  name="femur_4a" type="capsule" fromto="-0.4 -0.31 0  -0.3 -0.31 0" size="0.01"/>
+					<joint name="hip_4a" type="hinge" pos="-0.4 -0.32 0" axis="0 1 0"/>
+
+					<body name="tibia_4a">
+						<geom type="capsule" fromto="-0.3 -0.29 0   -0.4 -0.29 -0.1732" size="0.01" />
+						<joint name="knee_4a" type="hinge" pos="-0.3 -0.30 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_4" type="capsule" fromto="-0.4 -0.29 -0.1732  -0.41 -0.29 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_4b">
+					<geom  name="femur_4b" type="capsule" fromto="-0.4 -0.25 0 -0.5 -0.25 0" size="0.01"/>
+					<joint name="hip_4b"   type="hinge" pos="-0.4 -0.24 0" axis="0 1 0"/>
+
+					<body name="tibia_4b">
+						<geom type="capsule" fromto="-0.5 -0.27 0 -0.4 -0.27 -0.1732" size="0.01"/>
+						<joint name="knee_4b"  type="hinge" pos="-0.5 -0.26 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+		</body>
+
+		<geom type="plane" pos="0 0 -0.2"  size="1 1 0.1"/>
+	</worldbody>
+
+
+	<equality>
+		<connect body1="tibia_1a" body2="tibia_1b" anchor="0 0 -0.1732" />
+		<connect body1="tibia_2a" body2="tibia_2b" anchor="-0.4 0 -0.1732" />
+		<connect body1="tibia_3a" body2="tibia_3b" anchor="0 -0.28 -0.1732" />
+		<connect body1="tibia_4a" body2="tibia_4b" anchor="-0.4 -0.28 -0.1732" />
+	</equality>
+
+	<actuator>
+		<position name="u1" kp="5" joint="hip_1a" />
+		<velocity name="u2" kv="0.1" joint="hip_1a" />
+
+		<position name="u3" kp="5" joint="hip_1b" />
+		<velocity name="u4" kv="0.1" joint="hip_1b" />
+
+		<position name="u5" kp="5" joint="hip_2a" />
+		<velocity name="u6" kv="0.1" joint="hip_2a" />
+
+		<position name="u7" kp="5" joint="hip_2b" />
+		<velocity name="u8" kv="0.1" joint="hip_2b" />
+
+		<position name="u9" kp="5" joint="hip_3a" />
+		<velocity name="ua" kv="0.1" joint="hip_3a" />
+
+		<position name="ub" kp="5" joint="hip_3b" />
+		<velocity name="uc" kv="0.1" joint="hip_3b" />
+
+		<position name="ud" kp="5" joint="hip_4a" />
+		<velocity name="ue" kv="0.1" joint="hip_4a" />
+
+		<position name="uf" kp="5" joint="hip_4b" />
+		<velocity name="ug" kv="0.1" joint="hip_4b" />
+	</actuator>
+
+</mujoco>

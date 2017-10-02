@@ -1,0 +1,74 @@
+<!---------------------------------------------------
+
+	Title: Snapper model
+	Description: One snapper constrained to one dimension (see snapper.xml)
+	Author: Benjamin Chasnov (bchasnov@uw.edu)
+	Version: 0.1
+
+------------------------------------------------------>
+
+<mujoco model="snapper_1d">
+	<compiler coordinate="global"/>
+
+	<default>
+		<geom rgba=".8 .6 .4 1"/>
+	</default>
+
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256"/>
+	</asset>
+
+	<worldbody>
+		<light pos="0 1 1" dir="0 -1 -1" diffuse="1 1 1"/>
+
+		<body>
+			<!--- Geometry for motors --->
+			<geom type="cylinder" fromto="0 0.04 0 0 0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+			<geom type="cylinder" fromto="0 -0.04 0 0 -0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+			<joint type="slide" pos="0 0 0" axis="0 0 1" />
+
+			<!---- Defines the first leg (hip, femur, knee, tibia) ---->
+			<body name="leg1">
+				<geom  name="femur1" type="capsule" fromto="0 -0.03 0  0.1 -0.03 0" size="0.01"/>
+				<joint name="hip1" type="hinge" pos="0 -0.04 0" axis="0 1 0"/>
+
+				<body name="tibia1">
+					<geom type="capsule" fromto="0.1 -0.01 0   0 -0.01 -0.1732" size="0.01" />
+					<joint name="knee1" type="hinge" pos="0.1 -0.02 0" axis="0 1 0"/>
+
+					<body>
+						<geom name="foot" type="capsule" fromto="0 -0.01 -0.1732  -0.01 -0.01 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+					</body>
+				</body>
+			</body>
+
+			<!---- Defines the second leg (hip, femur, knee, tibia) ---->
+			<body name="leg2">
+				<geom  name="femur2" type="capsule" fromto="0 0.03 0 -0.1 0.03 0" size="0.01"/>
+				<joint name="hip2"   type="hinge" pos="0 0.02 0" axis="0 1 0"/>
+
+				<body name="tibia2">
+					<geom type="capsule" fromto="-0.1 0.01 0 0 0.01 -0.1732" size="0.01"/>
+					<joint name="knee2"  type="hinge" pos="-0.1 0.01 0" axis="0 1 0"/>
+				</body>
+			</body>
+		</body>
+		<geom type="plane" pos="0 0 -0.2"  size="1 1 0.1"/>
+
+	</worldbody>
+
+
+	<equality>
+		<connect body1="tibia1" body2="tibia2" anchor="0 0 -0.1732" />
+	</equality>
+
+	<actuator>
+		<position name="u1" kp="5" joint="hip1" />
+		<velocity name="u2" kv="0.1" joint="hip1" />
+
+		<position name="u3" kp="5" joint="hip2" />
+		<velocity name="u4" kv="0.1" joint="hip2" />
+	</actuator>
+
+</mujoco>

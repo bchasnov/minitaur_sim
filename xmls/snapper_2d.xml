@@ -1,0 +1,116 @@
+<!---------------------------------------------------
+
+	Title: Snapper model
+	Description: Combines two snappers (see snapper.xml)
+	Author: Benjamin Chasnov (bchasnov@uw.edu)
+	Version: 0.1
+
+------------------------------------------------------>
+<mujoco model="snapper_2d">
+	<compiler coordinate="global"/>
+
+	<default>
+		<geom rgba=".8 .6 .4 1"/>
+	</default>
+
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256"/>
+	</asset>
+
+	<worldbody>
+		<body>
+			<light pos="0 1 1" dir="0 -1 -1" diffuse="1 1 1"/>
+			<geom type="box" pos="-0.2 -0.05 0" size="0.2 0.008 0.02" rgba="0 0 0  0.2" />
+			<geom type="box" pos="-0.2  0.05 0" size="0.2 0.008 0.02" rgba="0 0 0  0.2" />
+			<joint type="slide" axis="0 0 1" />
+			<joint type="slide" axis="1 0 1" />
+
+			<body>
+				<!--- Geometry for motors (1) --->
+				<geom type="cylinder" fromto="0  0.04 0 0  0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="0 -0.04 0 0 -0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_1a">
+					<geom  name="femur_1a" type="capsule" fromto="0 -0.03 0  0.1 -0.03 0" size="0.01"/>
+					<joint name="hip_1a" type="hinge" pos="0 -0.04 0" axis="0 1 0"/>
+
+					<body name="tibia_1a">
+						<geom type="capsule" fromto="0.1 -0.01 0   0 -0.01 -0.1732" size="0.01" />
+						<joint name="knee_1a" type="hinge" pos="0.1 -0.02 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_1" type="capsule" fromto="0 -0.01 -0.1732  -0.01 -0.01 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_1b">
+					<geom  name="femur_1b" type="capsule" fromto="0 0.03 0 -0.1 0.03 0" size="0.01"/>
+					<joint name="hip_1b"   type="hinge" pos="0 0.04 0" axis="0 1 0"/>
+
+					<body name="tibia_1b">
+						<geom type="capsule" fromto="-0.1 0.01 0 0 0.01 -0.1732" size="0.01"/>
+						<joint name="knee_1b"  type="hinge" pos="-0.1 0.02 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+
+			<body>
+				<!--- Geometry for motors (2) --->
+				<geom type="cylinder" fromto="-0.4 0.04 0 -0.4 0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+				<geom type="cylinder" fromto="-0.4 -0.04 0 -0.4 -0.06 0" size="0.04" rgba="0.2 0.2 0.2 0.2" />
+
+				<!---- Defines the leg a (hip, femur, knee, tibia) ---->
+				<body name="leg_2a">
+					<geom  name="femur_2a" type="capsule" fromto="-0.4 -0.03 0  -0.3 -0.03 0" size="0.01"/>
+					<joint name="hip_2a" type="hinge" pos="-0.4 -0.04 0" axis="0 1 0"/>
+
+					<body name="tibia_2a">
+						<geom type="capsule" fromto="-0.3 -0.01 0   -0.4 -0.01 -0.1732" size="0.01" />
+						<joint name="knee_2a" type="hinge" pos="-0.3 -0.02 0" axis="0 1 0"/>
+
+						<body>
+							<geom name="foot_2" type="capsule" fromto="-0.4 -0.01 -0.1732  -0.41 -0.01 -0.19052" size="0.008"  rgba="0.1 0.1 0.1 1"/>
+						</body>
+					</body>
+				</body>
+
+				<!---- Defines the leg b (hip, femur, knee, tibia) ---->
+				<body name="leg_2b">
+					<geom  name="femur_2b" type="capsule" fromto="-0.4 0.03 0 -0.5 0.03 0" size="0.01"/>
+					<joint name="hip_2b"   type="hinge" pos="-0.4 0.02 0" axis="0 1 0"/>
+
+					<body name="tibia_2b">
+						<geom type="capsule" fromto="-0.5 0.01 0 -0.4 0.01 -0.1732" size="0.01"/>
+						<joint name="knee_2b"  type="hinge" pos="-0.5 0.01 0" axis="0 1 0"/>
+					</body>
+				</body>
+			</body>
+		</body>
+		<geom type="plane" pos="0 0 -0.2"  size="1 1 0.1"/>
+	</worldbody>
+
+
+	<equality>
+		<connect body1="tibia_1a" body2="tibia_1b" anchor="0 0 -0.1732" />
+		<connect body1="tibia_2a" body2="tibia_2b" anchor="-0.4 0 -0.1732" />
+	</equality>
+
+	<actuator>
+		<position name="u1" kp="5" joint="hip_1a" />
+		<velocity name="u2" kv="0.1" joint="hip_1a" />
+
+		<position name="u3" kp="5" joint="hip_1b" />
+		<velocity name="u4" kv="0.1" joint="hip_1b" />
+
+		<position name="u5" kp="5" joint="hip_2a" />
+		<velocity name="u6" kv="0.1" joint="hip_2a" />
+
+		<position name="u7" kp="5" joint="hip_2b" />
+		<velocity name="u8" kv="0.1" joint="hip_2b" />
+	</actuator>
+
+</mujoco>
