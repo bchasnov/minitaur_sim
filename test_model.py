@@ -66,7 +66,6 @@ def mini_hop(sim, t):
         control(sim, 0, 0)
 
 def tall_hop(sim, t):
-    # step functions ___-----___
     if t < 500:
         control(sim, 0, 0)
     elif t < 700:
@@ -75,7 +74,6 @@ def tall_hop(sim, t):
         control(sim, 0, 0)
 
 def sine_move(sim, t, max_time):
-    # step functions ___-----___
     period = 2*math.pi/max_time
     amplitude = 1
     offset = 0
@@ -85,7 +83,6 @@ def sine_move(sim, t, max_time):
     control(sim, x, -1*x)
 
 def wiggle_move(sim, t, max_time):
-    # step functions ___-----___
     period = 2*math.pi/max_time
     phase = math.pi/2
     amplitude = 1
